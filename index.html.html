@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jay Singh — Portfolio</title>
+
+<!-- ── FONTS: Poppins (headings) + Inter (body) ──────────────── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   RESET & DESIGN TOKENS
+   ============================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --yellow:   #F5E642;
+  --yellow-dim: rgba(245,230,66,0.15);
+  --black:    #07080f;          /* deep space blue-black */
+  --navy:     #0d0f1e;
+  --dark:     #10121f;
+  --card:     #12152a;
+  --white:    #eef0f7;
+  --muted:    rgba(238,240,247,0.5);
+  --red:      #FF3B3B;
+  --cyan:     #00EFFF;
+  --border:   rgba(245,230,66,0.1);
+
+  /* Typography */
+  --font-head: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Spacing scale */
+  --section-pad: 7rem 4rem;
+  --section-pad-sm: 4rem 1.5rem;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* ── Clean dark-blue gradient body background ──────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(30,40,120,0.45) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 80%, rgba(10,20,80,0.3) 0%, transparent 55%),
+    linear-gradient(180deg, #07080f 0%, #0b0d1c 40%, #07080f 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Space canvas sits above gradient, below content ────────── */
+#space-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── All page content above canvas ──────────────────────────── */
+nav, .hero, .ticker, section, footer, .software-bar {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Cursor glow ────────────────────────────────────────────── */
+#cursor-glow {
+  position: fixed;
+  top: 0; left: 0;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(245,230,66,0.8);
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+#cursor-glow.active   { opacity: 1; width: 12px; height: 12px; }
+#cursor-glow.hovering { width: 32px; height: 32px; background: rgba(0,239,255,0.4); }
+
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 3rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(245,230,66,0.05);
+  background: rgba(7,8,15,0.6);
+}
+
+.nav-logo {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--white);
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: rgba(238,240,247,0.65);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0; height: 1px;
+  background: var(--yellow);
+  transition: width 0.25s ease;
+}
+
+.nav-links a:hover { color: var(--yellow); }
+.nav-links a:hover::after { width: 100%; }
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 68% 42%, rgba(245,230,66,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 55% at 18% 65%, rgba(0,239,255,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0,0,0,0.06) 3px,
+    rgba(0,0,0,0.06) 4px
+  );
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* hero layout: text left | 3D model right */
+.hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  gap: 3rem;
+  padding-top: 6rem;
+}
+
+.hero-text-col { flex: 1; min-width: 0; }
+
+.hero-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  color: var(--yellow);
+  text-transform: uppercase;
+  margin-bottom: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.1s forwards;
+}
+
+/* ── Hero title: Poppins, massive ────────────────────────────── */
+.hero-title {
+  font-family: var(--font-head);
+  font-size: clamp(4.5rem, 12vw, 12rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  position: relative;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.25s forwards;
+}
+
+.hero-title .outline {
+  -webkit-text-stroke: 2px var(--yellow);
+  color: transparent;
+}
+
+/* Glitch effect — unchanged */
+.glitch { position: relative; display: inline-block; }
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  overflow: hidden;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+.glitch::before {
+  color: var(--red);
+  animation: glitch-before 3.5s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+  -webkit-text-stroke: 0;
+}
+.glitch::after {
+  color: var(--cyan);
+  animation: glitch-after 3.5s infinite;
+  clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+  -webkit-text-stroke: 0;
+}
+@keyframes glitch-before {
+  0%, 90%, 100% { transform: translate(0); opacity: 0; }
+  91%  { transform: translate(-4px,  1px); opacity: 0.8; }
+  92%  { transform: translate( 3px, -1px); opacity: 0.6; }
+  93%  { transform: translate(-2px,  2px); opacity: 0.9; }
+  94%  { transform: translate(0);         opacity: 0; }
+}
+@keyframes glitch-after {
+  0%, 90%, 100% { transform: translate(0); opacity: 0; }
+  91.5% { transform: translate( 4px, -2px); opacity: 0.7; }
+  92.5% { transform: translate(-3px,  1px); opacity: 0.5; }
+  93.5% { transform: translate( 2px, -1px); opacity: 0.8; }
+  94.5% { transform: translate(0);          opacity: 0; }
+}
+
+/* Cursor blink */
+.cursor-blink {
+  display: inline-block;
+  width: 3px; height: 0.85em;
+  background: var(--yellow);
+  margin-left: 6px;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.hero-sub {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 2.5rem;
+  gap: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.6s forwards;
+}
+
+.hero-desc {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--muted);
+  max-width: 360px;
+  line-height: 1.7;
+}
+
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  border: 1px solid var(--yellow);
+  padding: 1rem 2.2rem;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--yellow);
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--yellow);
+  transform: translateX(-101%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+.hero-cta:hover::before { transform: translateX(0); }
+.hero-cta:hover { color: var(--black); }
+
+.hero-scroll {
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: rgba(238,240,247,0.2);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  position: absolute;
+  right: 3rem;
+  bottom: 4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.hero-scroll::after {
+  content: '';
+  width: 1px; height: 48px;
+  background: rgba(238,240,247,0.15);
+  animation: scroll-line 1.6s ease-in-out infinite;
+}
+@keyframes scroll-line {
+  0%, 100% { opacity: 0.15; }
+  50%       { opacity: 0.6; }
+}
+
+/* ── Three.js 3D container ───────────────────────────────────── */
+#hero-3d {
+  width: 520px;
+  height: 520px;
+  flex-shrink: 0;
+  position: relative;
+  opacity: 0;
+  margin-top: -200px;
+  transform: translateY(36px) scale(0.93);
+  transition: opacity 1s cubic-bezier(0.16,1,0.3,1),
+              transform 1s cubic-bezier(0.16,1,0.3,1);
+}
+#hero-3d.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+/* Halo glow behind model */
+#hero-3d::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center,
+    rgba(245,230,66,0.07) 0%,
+    rgba(0,239,255,0.04) 45%,
+    transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+  animation: halo-pulse 4.5s ease-in-out infinite;
+}
+@keyframes halo-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.07); }
+}
+#hero-3d canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Page-load fade-up animation for hero elements */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ============================================================
+   TICKER
+   ============================================================ */
+.ticker {
+  background: var(--yellow);
+  padding: 0.7rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+}
+.ticker-track {
+  display: inline-flex;
+  animation: ticker 20s linear infinite;
+}
+.ticker-item {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--black);
+  text-transform: uppercase;
+  padding: 0 2rem;
+}
+.ticker-dot { color: rgba(0,0,0,0.3); }
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+
+/* ============================================================
+   SECTIONS — shared
+   ============================================================ */
+section { padding: var(--section-pad); }
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  color: var(--yellow);
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+
+/* ============================================================
+   WORK GRID
+   ============================================================ */
+#work { border-top: 1px solid var(--border); }
+
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.2rem;
+}
+
+.work-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.work-card:hover { border-color: rgba(245,230,66,0.35); transform: translateY(-4px); }
+
+.work-card:nth-child(1) { grid-column: span 7; aspect-ratio: 16/9; }
+.work-card:nth-child(2) { grid-column: span 5; aspect-ratio: 16/9; }
+.work-card:nth-child(3) { grid-column: span 4; aspect-ratio: 4/5;  }
+.work-card:nth-child(4) { grid-column: span 4; aspect-ratio: 4/5;  }
+.work-card:nth-child(5) { grid-column: span 4; aspect-ratio: 4/5;  }
+
+.work-thumb-placeholder {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #181c32 0%, #0e1020 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-size: clamp(1.8rem, 4vw, 4.5rem);
+  font-weight: 800;
+  color: rgba(245,230,66,0.06);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.work-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(7,8,15,0.95) 0%, transparent 55%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.6rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.work-card:hover .work-overlay { opacity: 1; }
+
+.work-tag {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--yellow);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.work-title {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+}
+
+
+/* ============================================================
+   SKILLS GRID (What I Do)
+   ============================================================ */
+.skills-section { border-top: 1px solid var(--border); }
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.skill-item {
+  background: var(--black);
+  padding: 2.8rem 2.2rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.skill-item:hover { background: rgba(245,230,66,0.025); }
+
+.skill-num {
+  font-family: var(--font-head);
+  font-size: 5rem;
+  font-weight: 800;
+  color: rgba(245,230,66,0.05);
+  position: absolute;
+  top: 0.8rem; right: 1.2rem;
+  line-height: 1;
+}
+.skill-icon {
+  width: 38px; height: 38px;
+  border: 1px solid rgba(245,230,66,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.6rem;
+}
+.skill-icon svg { width: 18px; height: 18px; stroke: var(--yellow); fill: none; stroke-width: 1.5; }
+
+.skill-name {
+  font-family: var(--font-head);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 0.6rem;
+}
+.skill-desc {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: rgba(238,240,247,0.4);
+  line-height: 1.65;
+}
+
+
+/* ============================================================
+   SOFTWARE SKILLS BAR  (NEW)
+   ============================================================ */
+.software-bar {
+  border-top: 1px solid var(--border);
+  padding: 5rem 4rem;
+  overflow: hidden;
+}
+
+.software-bar .section-label { margin-bottom: 3.5rem; }
+
+/* The track that holds the yellow line + tool nodes */
+.sbar-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Connecting yellow line — animated width from left */
+.sbar-line {
+  position: absolute;
+  top: 50%;
+  left: 2rem;
+  right: 2rem;
+  height: 2px;
+  background: rgba(245,230,66,0.15);
+  transform: translateY(-50%);
+  overflow: hidden;
+}
+.sbar-line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 0;
+  background: var(--yellow);
+  transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+}
+.sbar-line.animate::after { width: 100%; }
+
+/* Individual tool node */
+.sbar-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+  z-index: 2;
+  cursor: default;
+
+  /* pop-in scroll animation starting state */
+  opacity: 0;
+  transform: scale(0.75) translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.sbar-tool.animate {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Dot on the line */
+.sbar-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--yellow);
+  background: var(--black);
+  position: relative;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.sbar-dot::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--yellow);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.sbar-tool:hover .sbar-dot::before { opacity: 1; }
+.sbar-tool:hover .sbar-dot {
+  box-shadow: 0 0 14px rgba(245,230,66,0.5);
+}
+
+/* Software icon container */
+.sbar-icon {
+  width: 52px; height: 52px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.sbar-tool:hover .sbar-icon {
+  border-color: var(--yellow);
+  transform: translateY(-4px);
+}
+.sbar-icon svg { width: 26px; height: 26px; }
+
+.sbar-name {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(238,240,247,0.6);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.sbar-tool:hover .sbar-name { color: var(--yellow); }
+
+/* Mobile: grid layout instead */
+@media (max-width: 700px) {
+  .sbar-track { flex-wrap: wrap; gap: 2rem; justify-content: center; }
+  .sbar-line  { display: none; }
+}
+
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+
+.about-big {
+  font-family: var(--font-head);
+  font-size: clamp(3rem, 7vw, 7rem);
+  font-weight: 800;
+  line-height: 0.92;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+.about-big span {
+  -webkit-text-stroke: 2px var(--yellow);
+  color: transparent;
+}
+
+.about-text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 1.8rem;
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+.stat {
+  border-left: 2px solid var(--yellow);
+  padding-left: 1.1rem;
+}
+.stat-num {
+  font-family: var(--font-head);
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--yellow);
+  line-height: 1;
+}
+.stat-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: rgba(238,240,247,0.35);
+  text-transform: uppercase;
+  margin-top: 0.35rem;
+}
+
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-section {
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 9rem 4rem;
+}
+.contact-sub {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: rgba(238,240,247,0.3);
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+}
+.contact-big {
+  font-family: var(--font-head);
+  font-size: clamp(4rem, 11vw, 11rem);
+  font-weight: 800;
+  line-height: 0.88;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin-bottom: 3rem;
+  cursor: pointer;
+  display: inline-block;
+}
+.contact-big:hover .glitch::before { animation-duration: 0.2s; }
+
+.contact-email {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--white);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(245,230,66,0.25);
+  padding-bottom: 0.2rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+.contact-email:hover { color: var(--yellow); border-color: var(--yellow); }
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2.2rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-copy {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: rgba(238,240,247,0.2);
+  text-transform: uppercase;
+}
+.footer-socials { display: flex; gap: 1.5rem; }
+.footer-socials a {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: rgba(238,240,247,0.3);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.footer-socials a:hover { color: var(--yellow); }
+
+
+/* ============================================================
+   SCROLL REVEAL SYSTEM
+   All scroll-animated elements start in this state;
+   JS IntersectionObserver adds .in-view to trigger transition
+   ============================================================ */
+.sr {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.sr.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays — applied via data-delay attribute in JS */
+.sr[data-delay="1"] { transition-delay: 0.08s; }
+.sr[data-delay="2"] { transition-delay: 0.16s; }
+.sr[data-delay="3"] { transition-delay: 0.24s; }
+.sr[data-delay="4"] { transition-delay: 0.32s; }
+.sr[data-delay="5"] { transition-delay: 0.40s; }
+.sr[data-delay="6"] { transition-delay: 0.48s; }
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1200px) {
+  #hero-3d { width: 420px; height: 420px; }
+}
+
+@media (max-width: 1024px) {
+  :root { --section-pad: 5rem 2.5rem; }
+  .about-section { gap: 3rem; }
+}
+
+@media (max-width: 900px) {
+  :root { --section-pad: var(--section-pad-sm); }
+
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { gap: 1.5rem; }
+
+  .hero { padding: 0 1.5rem; }
+  .hero-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 7rem;
+    gap: 0;
+  }
+  #hero-3d {
+    width: 300px; height: 300px;
+    align-self: center;
+    margin-top: 2rem;
+  }
+
+  .hero-sub { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+
+  .works-grid { grid-template-columns: 1fr 1fr; }
+  .work-card:nth-child(1),
+  .work-card:nth-child(2) { grid-column: span 2; }
+  .work-card:nth-child(3),
+  .work-card:nth-child(4),
+  .work-card:nth-child(5) { grid-column: span 2; }
+
+  .skills-grid { grid-template-columns: 1fr; }
+  .about-section { grid-template-columns: 1fr; gap: 3rem; }
+
+  .software-bar { padding: 4rem 1.5rem; }
+  footer { padding: 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  #hero-3d { width: 240px; height: 240px; }
+  .hero-title { font-size: clamp(3.5rem, 16vw, 9rem); }
+  .contact-section { padding: 6rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Space canvas (stars + asteroids) -->
+<canvas id="space-canvas" aria-hidden="true"></canvas>
+
+<!-- Cursor glow -->
+<div id="cursor-glow" aria-hidden="true"></div>
+
+<!-- ── NAV ────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">Jay</div>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ───────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-scanlines"></div>
+
+  <div class="hero-inner">
+
+    <!-- Text column -->
+    <div class="hero-text-col">
+      <p class="hero-eyebrow">Video Editor &amp; Multimedia Designer — Mumbai</p>
+
+      <h1 class="hero-title">
+        <span class="glitch" data-text="FRAME">FRAME</span><br>
+        <span class="outline">YOUR</span><br>
+        <span class="glitch" data-text="VISION">VISION<span class="cursor-blink"></span></span>
+      </h1>
+
+      <div class="hero-sub">
+        <p class="hero-desc">
+          High-energy edits, cinematic storytelling, and scroll-stopping visuals for brands and creators.
+        </p>
+        <a href="#work" class="hero-cta">
+          View Reel
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Three.js model -->
+    <div id="hero-3d" aria-hidden="true"></div>
+
+  </div>
+
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ── TICKER ─────────────────────────────────────────────────── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item">Premiere Pro</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">After Effects</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Lumetri Color</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Motion Graphics</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Sound Design</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Glitch FX</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Text Animation</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Color Grading</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Premiere Pro</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">After Effects</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Lumetri Color</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Motion Graphics</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Sound Design</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Glitch FX</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Text Animation</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Color Grading</span><span class="ticker-item ticker-dot">✦</span>
+  </div>
+</div>
+
+<!-- ── WORK ───────────────────────────────────────────────────── -->
+<section id="work">
+  <p class="section-label sr">My Projects Work</p>
+  <div class="works-grid">
+    <div class="work-card sr" data-delay="1">
+      <div class="work-thumb-placeholder">REEL 01</div>
+      <div class="work-overlay">
+        <p class="work-tag">Commercial · 2025</p>
+        <p class="work-title">Brand Reel — Automotive</p>
+      </div>
+    </div>
+    <div class="work-card sr" data-delay="2">
+      <div class="work-thumb-placeholder">REEL 02</div>
+      <div class="work-overlay">
+        <p class="work-tag">Music Video · 2025</p>
+        <p class="work-title">Cinematic Cuts</p>
+      </div>
+    </div>
+    <div class="work-card sr" data-delay="1">
+      <div class="work-thumb-placeholder">03</div>
+      <div class="work-overlay">
+        <p class="work-tag">Social · 2024</p>
+        <p class="work-title">Content Series</p>
+      </div>
+    </div>
+    <div class="work-card sr" data-delay="2">
+      <div class="work-thumb-placeholder">04</div>
+      <div class="work-overlay">
+        <p class="work-tag">Motion · 2024</p>
+        <p class="work-title">Text Animation</p>
+      </div>
+    </div>
+    <div class="work-card sr" data-delay="3">
+      <div class="work-thumb-placeholder">05</div>
+      <div class="work-overlay">
+        <p class="work-tag">Color · 2024</p>
+        <p class="work-title">Grade Study</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOFTWARE SKILLS BAR (NEW) ──────────────────────────────── -->
+<section id="skills" class="software-bar">
+  <p class="section-label sr">Software</p>
+
+  <div class="sbar-track">
+    <!-- Yellow connecting line -->
+    <div class="sbar-line" id="sbar-line"></div>
+
+    <!-- Blender -->
+    <div class="sbar-tool" data-sbar>
+      <div class="sbar-icon">
+        <!-- Blender icon (orange circle / simple mark) -->
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="13" r="4" fill="#EA7600" opacity="0.9"/>
+          <path d="M8 7h8M6 10l-3 3 3 3M18 10l3 3-3 3" stroke="#EA7600" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="sbar-dot"></div>
+      <span class="sbar-name">Blender</span>
+    </div>
+
+    <!-- Photoshop -->
+    <div class="sbar-tool" data-sbar>
+      <div class="sbar-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="18" height="18" rx="3" fill="#001E36" stroke="#31A8FF" stroke-width="1.2"/>
+          <text x="4.5" y="16" font-family="Arial" font-size="10" font-weight="900" fill="#31A8FF">Ps</text>
+        </svg>
+      </div>
+      <div class="sbar-dot"></div>
+      <span class="sbar-name">Photoshop</span>
+    </div>
+
+    <!-- Premiere Pro -->
+    <div class="sbar-tool" data-sbar>
+      <div class="sbar-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="18" height="18" rx="3" fill="#00005B" stroke="#9999FF" stroke-width="1.2"/>
+          <text x="4.5" y="16" font-family="Arial" font-size="10" font-weight="900" fill="#9999FF">Pr</text>
+        </svg>
+      </div>
+      <div class="sbar-dot"></div>
+      <span class="sbar-name">Premiere Pro</span>
+    </div>
+
+    <!-- After Effects -->
+    <div class="sbar-tool" data-sbar>
+      <div class="sbar-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="18" height="18" rx="3" fill="#00005B" stroke="#9999FF" stroke-width="1.2"/>
+          <text x="4.5" y="16" font-family="Arial" font-size="10" font-weight="900" fill="#9999FF">Ae</text>
+        </svg>
+      </div>
+      <div class="sbar-dot"></div>
+      <span class="sbar-name">After Effects</span>
+    </div>
+
+    <!-- DaVinci Resolve -->
+    <div class="sbar-tool" data-sbar>
+      <div class="sbar-icon">
+        <!-- Resolve: dark bg + simplified knob icon -->
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="18" height="18" rx="3" fill="#1a1a1a" stroke="#555" stroke-width="1.2"/>
+          <circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="1.4"/>
+          <circle cx="12" cy="12" r="1.5" fill="#fff"/>
+          <line x1="12" y1="8" x2="12" y2="6" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="sbar-dot"></div>
+      <span class="sbar-name">DaVinci Resolve</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── WHAT I DO ──────────────────────────────────────────────── -->
+<section class="skills-section">
+  <p class="section-label sr">What I Do</p>
+  <div class="skills-grid">
+
+    <div class="skill-item sr" data-delay="1">
+      <div class="skill-num">01</div>
+      <div class="skill-icon">
+        <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.275A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+      </div>
+      <p class="skill-name">Video Editing</p>
+      <p class="skill-desc">Narrative-driven cuts. Pacing that breathes. Premiere Pro workflow built for speed and quality.</p>
+    </div>
+
+    <div class="skill-item sr" data-delay="2">
+      <div class="skill-num">02</div>
+      <div class="skill-icon">
+        <svg viewBox="0 0 24 24"><path d="M7 4v16M17 4v16M3 8h4m10 0h4M3 16h4m10 0h4M4 12h16"/></svg>
+      </div>
+      <p class="skill-name">Color Grading</p>
+      <p class="skill-desc">Lumetri Color, LUTs, and scene-by-scene grading that gives your footage a signature look.</p>
+    </div>
+
+    <div class="skill-item sr" data-delay="3">
+      <div class="skill-num">03</div>
+      <div class="skill-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/><circle cx="18" cy="18" r="3"/><path d="M18 15v3l2 1"/></svg>
+      </div>
+      <p class="skill-name">Motion Graphics</p>
+      <p class="skill-desc">Text animations, glitch FX, lower thirds. After Effects motion that punches through the screen.</p>
+    </div>
+
+    <div class="skill-item sr" data-delay="1">
+      <div class="skill-num">04</div>
+      <div class="skill-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 19V6l12-3v13M9 19c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zM21 16c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"/></svg>
+      </div>
+      <p class="skill-name">Sound Design</p>
+      <p class="skill-desc">Music sync, SFX layering, and audio mixing to make every cut land with impact.</p>
+    </div>
+
+    <div class="skill-item sr" data-delay="2">
+      <div class="skill-num">05</div>
+      <div class="skill-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <p class="skill-name">Content Strategy</p>
+      <p class="skill-desc">Editing for platform — vertical, horizontal, short-form Reels to long-form documentary cuts.</p>
+    </div>
+
+    <div class="skill-item sr" data-delay="3">
+      <div class="skill-num">06</div>
+      <div class="skill-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <p class="skill-name">Fast Turnaround</p>
+      <p class="skill-desc">Organized project management and revision workflows. Deadlines met, every time.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── ABOUT ──────────────────────────────────────────────────── -->
+<section id="about" class="about-section">
+  <div class="sr">
+    <p class="about-big">I EDIT<br><span>TO</span><br>IMPACT.</p>
+  </div>
+  <div>
+    <p class="section-label sr">About</p>
+    <p class="about-text sr" data-delay="1">
+      I am a Video Editor and Motion Designer with over a year of experience creating visual content for professional diplomas and creative brands. I specialize in taking raw concepts and turning them into clean, high-retention marketing assets.
+    </p>
+    <p class="about-text sr" data-delay="2">
+      My style blends high-energy motion design with precise color grading. Having delivered 10+ brand-focused projects, 
+      I understand how to tailor visuals for different platforms—from vertical Reels to long-form commercial cuts.
+    </p>
+    <div class="about-stats">
+      <div class="stat sr" data-delay="1">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Brand Projects</div>
+      </div>
+      <div class="stat sr" data-delay="2">
+        <div class="stat-num">1+</div>
+        <div class="stat-label">Year Experience</div>
+      </div>
+      <div class="stat sr" data-delay="3">
+        <div class="stat-num">4K</div>
+        <div class="stat-label">Max Resolution</div>
+      </div>
+      <div class="stat sr" data-delay="4">
+        <div class="stat-num">24h</div>
+        <div class="stat-label">Avg Turnaround</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ────────────────────────────────────────────────── -->
+<section id="contact" class="contact-section">
+  <p class="contact-sub sr">Ready to make something?</p>
+  <h2 class="contact-big sr" data-delay="1">
+    <span class="glitch" data-text="LET'S">LET'S</span><br>
+    <span class="glitch" data-text="TALK.">TALK.</span>
+  </h2>
+  <br><br>
+<a href="https://mail.google.com/mail/?view=cm&fs=1&to=jaysingh2701@gmail.com&su=Video%20Editing%20Enquiry&body=Hi%20Jay,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project..." 
+   target="_blank" 
+   class="btn" 
+   style="background-color: #F5E642; color: #07080f; font-weight: 700; padding: 15px 35px; border-radius: 50px; text-decoration: none; display: inline-block; transition: transform 0.3s ease;">
+   GET IN TOUCH
+</a>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────── -->
+<footer>
+  <p class="footer-copy">© 2025 Jay Singh — All rights reserved</p>
+  <div class="footer-socials">
+    <a href="https://www.instagram.com/jay._singh__?igsh=MTFodjJuMDFzMWs2NQ==/" target="_blank">Instagram</a>
+    <a href="https://www.youtube.com/@KamiPlay-Gaming/" target="_blank">YouTube</a>
+    <a href="https://www.behance.net/jaysingh43/" target="_blank">Behance</a>
+    <a href="https://www.linkedin.com/in/jay-s-22736b293/" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<!-- ============================================================
+     THREE.JS r134 — unchanged, stable version
+     ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ──────────────────────────────────────────────────────────
+     SHARED: Mouse state (normalised -1..1)
+     ────────────────────────────────────────────────────────── */
+  const mouse = { x: 0, y: 0, nx: 0, ny: 0 };
+  window.addEventListener('mousemove', e => {
+    mouse.x  = e.clientX;
+    mouse.y  = e.clientY;
+    mouse.nx = (e.clientX / window.innerWidth)  * 2 - 1;
+    mouse.ny = (e.clientY / window.innerHeight) * 2 - 1;
+  });
+
+
+  /* ══════════════════════════════════════════════════════════
+     1. SPACE CANVAS  — clean: stars + minimal asteroids only
+        NO nebula, NO noise overlay, NO heavy glows
+     ══════════════════════════════════════════════════════════ */
+  const spaceCanvas = document.getElementById('space-canvas');
+  const ctx = spaceCanvas.getContext('2d');
+
+  function resizeSpace() {
+    spaceCanvas.width  = window.innerWidth;
+    spaceCanvas.height = window.innerHeight;
+  }
+  resizeSpace();
+  window.addEventListener('resize', resizeSpace, { passive: true });
+
+  /* ── Stars ─────────────────────────────────────────────── */
+  const STAR_COUNT = 220;
+  const stars = Array.from({ length: STAR_COUNT }, () => ({
+    x:     Math.random() * window.innerWidth,
+    y:     Math.random() * window.innerHeight,
+    r:     Math.random() * 1.3 + 0.25,
+    /* Two-tone star population: majority cool-white, few warm */
+    warm:  Math.random() < 0.15,
+    alpha: Math.random() * 0.55 + 0.2,
+    /* Twinkle */
+    tSpeed: Math.random() * 0.5 + 0.08,
+    tPhase: Math.random() * Math.PI * 2,
+    /* Parallax depth layer */
+    depth:  Math.random() * 1.8 + 0.3,
+  }));
+  /* Save original positions for parallax */
+  stars.forEach(s => { s.ox = s.x; s.oy = s.y; });
+
+  /* ── Minimal geometric asteroids ───────────────────────── */
+  const ASTEROID_COUNT = 5;
+  const asteroids = Array.from({ length: ASTEROID_COUNT }, () => {
+    const sides = Math.floor(Math.random() * 3) + 5;
+    return {
+      x:        Math.random() * window.innerWidth,
+      y:        Math.random() * window.innerHeight,
+      r:        Math.random() * 16 + 8,
+      sides,
+      angle:    Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.003,
+      dx:       (Math.random() - 0.5) * 0.14,
+      dy:       (Math.random() - 0.5) * 0.09,
+      alpha:    Math.random() * 0.18 + 0.06,
+      offsets:  Array.from({ length: sides }, () => Math.random() * 0.3 + 0.75),
+    };
+  });
+
+  function drawAsteroid(a) {
+    ctx.save();
+    ctx.translate(a.x, a.y);
+    ctx.rotate(a.angle);
+    ctx.beginPath();
+    for (let i = 0; i < a.sides; i++) {
+      const theta = (i / a.sides) * Math.PI * 2;
+      const r = a.r * a.offsets[i];
+      const x = Math.cos(theta) * r;
+      const y = Math.sin(theta) * r;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    /* Clean line-only style — no heavy fill */
+    ctx.strokeStyle = `rgba(160,170,220,${a.alpha})`;
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+    ctx.fillStyle = `rgba(30,40,90,${a.alpha * 0.25})`;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  /* ── Parallax state ──────────────────────────────────────── */
+  let spPx = 0, spPy = 0;
+
+  /* ── Render loop ─────────────────────────────────────────── */
+  let spLastTime = 0;
+  function renderSpace(ts) {
+    requestAnimationFrame(renderSpace);
+    spLastTime = ts;
+
+    const W = spaceCanvas.width;
+    const H = spaceCanvas.height;
+    const now = ts * 0.001;
+
+    /* Smooth mouse parallax */
+    spPx += (mouse.nx * 14 - spPx) * 0.04;
+    spPy += (mouse.ny *  8 - spPy) * 0.04;
+
+    ctx.clearRect(0, 0, W, H);
+
+    /* ── Draw stars ─────────────────────────── */
+    stars.forEach(s => {
+      const sx = ((s.ox + spPx * s.depth) % W + W) % W;
+      const sy = ((s.oy + spPy * s.depth) % H + H) % H;
+
+      /* Twinkle: smooth sine oscillation */
+      const tw = Math.sin(now * s.tSpeed + s.tPhase) * 0.2;
+      const a  = Math.max(0.05, s.alpha + tw);
+
+      /* Star colour */
+      const col = s.warm
+        ? `rgba(255,230,180,${a})`
+        : `rgba(210,215,255,${a})`;
+
+      ctx.beginPath();
+      ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = col;
+      ctx.fill();
+    });
+
+    /* ── Draw asteroids ─────────────────────── */
+    asteroids.forEach(a => {
+      a.x += a.dx;
+      a.y += a.dy;
+      a.angle += a.rotSpeed;
+      if (a.x < -a.r * 2) a.x = W + a.r;
+      if (a.x > W + a.r * 2) a.x = -a.r;
+      if (a.y < -a.r * 2) a.y = H + a.r;
+      if (a.y > H + a.r * 2) a.y = -a.r;
+      drawAsteroid(a);
+    });
+  }
+  requestAnimationFrame(renderSpace);
+
+
+  /* ══════════════════════════════════════════════════════════
+     2. THREE.JS HERO — tv.glb  (unchanged from v3, fully kept)
+     ══════════════════════════════════════════════════════════ */
+  function initThree() {
+    const container = document.getElementById('hero-3d');
+    if (!container) return;
+
+    function getSize() {
+      return {
+        w: container.clientWidth  || 520,
+        h: container.clientHeight || 520,
+      };
+    }
+    let { w, h } = getSize();
+
+    /* Renderer */
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance',
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(w, h);
+    renderer.setClearColor(0x000000, 0);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    container.appendChild(renderer.domElement);
+
+    /* Scene & Camera */
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(55, w / h, 0.01, 100);
+    camera.position.set(0, 0, 8);
+    camera.lookAt(0, 0, 0);
+
+    /* Lighting */
+    scene.add(new THREE.AmbientLight(0xffeedd, 0.55));
+
+    const keyLight = new THREE.DirectionalLight(0xfff4e0, 1.4);
+    keyLight.position.set(-3, 4, 5);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(1024, 1024);
+    scene.add(keyLight);
+
+    const rimLight = new THREE.DirectionalLight(0x00f0ff, 0.6);
+    rimLight.position.set(4, 1, -3);
+    scene.add(rimLight);
+
+    const screenLight = new THREE.PointLight(0xf5e642, 0.8, 6);
+    screenLight.position.set(0, 0.2, 3);
+    scene.add(screenLight);
+
+    /* Pivot group */
+    const pivot = new THREE.Group();
+    scene.add(pivot);
+
+    /* Load GLB */
+    let model = null;
+    const loader = new THREE.GLTFLoader();
+
+    loader.load(
+      './tv.glb',
+      function (gltf) {
+        model = gltf.scene;
+
+        /* Centre */
+        const box    = new THREE.Box3().setFromObject(model);
+        const centre = new THREE.Vector3();
+        box.getCenter(centre);
+        const size   = new THREE.Vector3();
+        box.getSize(size);
+        model.position.sub(centre);
+
+        /* Auto-scale */
+        const maxDim      = Math.max(size.x, size.y, size.z);
+        const fovRad      = THREE.MathUtils.degToRad(camera.fov);
+        const visH        = 2 * Math.tan(fovRad / 2) * camera.position.z;
+        const scaleFactor = (visH * 0.90) / maxDim;
+        model.scale.setScalar(scaleFactor);
+
+        /* Face forward */
+        model.rotation.set(0, 0, 0);
+        model.rotation.y = -Math.PI / 2;
+        model.rotation.x = THREE.MathUtils.degToRad(-4);
+
+        pivot.add(model);
+
+        /* Shadows */
+        model.traverse(child => {
+          if (child.isMesh) {
+            child.castShadow = child.receiveShadow = true;
+            if (child.material) child.material.needsUpdate = true;
+          }
+        });
+
+        console.log('%c✅ tv.glb loaded', 'color:#F5E642');
+        setTimeout(() => container.classList.add('visible'), 120);
+      },
+      null,
+      function (err) {
+        console.error('❌ GLB load failed:', err);
+        /* Fallback wireframe */
+        const fbMesh = new THREE.Mesh(
+          new THREE.IcosahedronGeometry(1.2, 1),
+          new THREE.MeshBasicMaterial({ color: 0xF5E642, wireframe: true, transparent: true, opacity: 0.5 })
+        );
+        pivot.add(fbMesh);
+        setTimeout(() => container.classList.add('visible'), 120);
+      }
+    );
+
+    /* Scroll parallax */
+    let scrollProgress = 0;
+    function updateScroll() {
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+      const rect = hero.getBoundingClientRect();
+      const raw  = 1 - (rect.bottom / (hero.offsetHeight + window.innerHeight));
+      scrollProgress = Math.max(0, Math.min(1, raw));
+    }
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    updateScroll();
+
+    /* Animation state */
+    const st = { tiltX: 0, tiltY: 0, floatY: 0, parY: 0, parX: 0 };
+
+    /* Resize */
+    function onResize() {
+      const s = getSize();
+      camera.aspect = s.w / s.h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(s.w, s.h);
+    }
+    window.addEventListener('resize', onResize);
+
+    /* Animate */
+    let rafId, lastTs = 0;
+    function animate(ts) {
+      rafId = requestAnimationFrame(animate);
+      const dt = Math.min((ts - lastTs) / 1000, 0.05);
+      lastTs = ts;
+      const k = 1 - Math.pow(0.001, dt);
+
+      st.tiltX += (mouse.ny * THREE.MathUtils.degToRad(8) - st.tiltX) * k * 0.35;
+      st.tiltY += (mouse.nx * THREE.MathUtils.degToRad(8) - st.tiltY) * k * 0.35;
+
+      const targetFloat = Math.sin(ts * 0.00065 * Math.PI * 2) * 0.07;
+      st.floatY += (targetFloat - st.floatY) * k * 0.8;
+
+      st.parY += ( scrollProgress * 0.4 - st.parY) * k * 0.5;
+      st.parX += (-scrollProgress * 0.06 - st.parX) * k * 0.5;
+
+      if (model) {
+        pivot.rotation.x = THREE.MathUtils.degToRad(-4) + st.tiltX;
+        pivot.rotation.y = st.tiltY;
+        pivot.position.y = st.floatY + st.parY;
+        pivot.position.x = st.parX;
+      }
+
+      renderer.render(scene, camera);
+    }
+    rafId = requestAnimationFrame(animate);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafId);
+      } else {
+        lastTs = performance.now();
+        rafId  = requestAnimationFrame(animate);
+      }
+    });
+  }
+
+  /* Trigger Three.js via IntersectionObserver */
+  const hero3dEl = document.getElementById('hero-3d');
+  if (hero3dEl) {
+    const obs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        obs.disconnect();
+        function tryInit() {
+          if (typeof THREE !== 'undefined' && typeof THREE.GLTFLoader !== 'undefined') {
+            initThree();
+          } else {
+            setTimeout(tryInit, 50);
+          }
+        }
+        tryInit();
+      }
+    }, { threshold: 0.1 });
+    obs.observe(hero3dEl);
+  }
+
+
+  /* ══════════════════════════════════════════════════════════
+     3. SCROLL REVEAL — IntersectionObserver
+        Watches all .sr elements; adds .in-view when visible
+     ══════════════════════════════════════════════════════════ */
+  const srObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          srObserver.unobserve(entry.target); /* fire once */
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  document.querySelectorAll('.sr').forEach(el => srObserver.observe(el));
+
+
+  /* ══════════════════════════════════════════════════════════
+     4. SOFTWARE SKILL BAR ANIMATION
+        Line draws left→right, then tool icons pop in staggered
+     ══════════════════════════════════════════════════════════ */
+  const sbarLine  = document.getElementById('sbar-line');
+  const sbarTools = document.querySelectorAll('[data-sbar]');
+
+  if (sbarLine && sbarTools.length) {
+    const sbarObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          sbarObserver.disconnect();
+
+          /* 1. Animate the yellow line */
+          sbarLine.classList.add('animate');
+
+          /* 2. Stagger each tool icon after a base delay */
+          sbarTools.forEach((tool, i) => {
+            setTimeout(() => tool.classList.add('animate'), 300 + i * 130);
+          });
+        }
+      },
+      { threshold: 0.3 }
+    );
+    sbarObserver.observe(sbarLine.parentElement);
+  }
+
+
+  /* ══════════════════════════════════════════════════════════
+     5. CURSOR GLOW
+     ══════════════════════════════════════════════════════════ */
+  const cursorDot = document.getElementById('cursor-glow');
+  let cursorActive = false;
+
+  window.addEventListener('mousemove', e => {
+    cursorDot.style.left = e.clientX + 'px';
+    cursorDot.style.top  = e.clientY + 'px';
+    if (!cursorActive) {
+      cursorDot.classList.add('active');
+      cursorActive = true;
+    }
+  });
+
+  const heroEl = document.querySelector('.hero');
+  if (heroEl) {
+    heroEl.addEventListener('mouseenter', () => cursorDot.classList.add('hovering'));
+    heroEl.addEventListener('mouseleave', () => cursorDot.classList.remove('hovering'));
+  }
+
+})();
+</script>
+</body>
+</html>
