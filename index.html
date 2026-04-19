@@ -1794,8 +1794,8 @@ footer {
       alpha:           true,
       powerPreference: isMobile ? 'low-power' : 'high-performance'
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
-    renderer.setSize(w, h);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
     renderer.shadowMap.enabled   = !isMobile;
     renderer.toneMapping         = THREE.ACESFilmicToneMapping;
